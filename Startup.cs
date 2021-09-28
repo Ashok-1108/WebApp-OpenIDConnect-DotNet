@@ -21,6 +21,7 @@ namespace active_directory_aspnetcore_webapp_openidconnect_v2
 
         public IConfiguration Configuration { get; }
 
+      
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -31,6 +32,16 @@ namespace active_directory_aspnetcore_webapp_openidconnect_v2
                     .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
                         .AddMicrosoftGraph(Configuration.GetSection("DownstreamApi"))
                         .AddInMemoryTokenCaches();
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://example.com",
+                                            "http://www.contoso.com");
+                    });
+            });
 
             services.AddControllersWithViews(options =>
             {
@@ -60,6 +71,7 @@ namespace active_directory_aspnetcore_webapp_openidconnect_v2
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
