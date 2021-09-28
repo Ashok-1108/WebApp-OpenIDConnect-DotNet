@@ -33,15 +33,23 @@ namespace active_directory_aspnetcore_webapp_openidconnect_v2
                         .AddMicrosoftGraph(Configuration.GetSection("DownstreamApi"))
                         .AddInMemoryTokenCaches();
 
-            services.AddCors(options =>
+            //services.AddCors(options =>
+            //{
+            //    options.AddDefaultPolicy(
+            //        builder =>
+            //        {
+            //            builder.WithOrigins("http://example.com",
+            //                                "http://www.contoso.com");
+            //        });
+            //});
+
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.WithOrigins("http://example.com",
-                                            "http://www.contoso.com");
-                    });
-            });
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
 
             services.AddControllersWithViews(options =>
             {
